@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node bin/www",
-    "dev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon bin/www",
+    "dev": "cross-env NODE_ENV=dev ./node_modules/.bin/nodemon --inspect=9229 bin/www",
     "prd": "cross-env NODE_ENV=production pm2 start bin/www",
     "lint": "eslint --ext .js ./src",
     "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors"
@@ -34,5 +34,7 @@
     "pre-commit": "^1.2.2",
     "supertest": "^6.0.1"
   },
-  "pre-commit":["lint"]
+  "pre-commit": [
+    "lint"
+  ]
 }
