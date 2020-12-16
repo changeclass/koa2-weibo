@@ -5,7 +5,10 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const session = require('koa-generic-session')
+const redisStore = require('koa-redis')
 
+const { REDIS_CONF } = require('./config/db')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
@@ -27,7 +30,24 @@ app.use(
     extension: 'ejs'
   })
 )
-
+// session配置（加密密匙）
+app.keys = ['XiaoKang666']
+app.use(
+  session({
+    // cookie的name 默认是 koa.sid
+    key: 'weibo.sid',
+    // redis key 的前缀 默认是 koa.sess
+    prefix: 'weibo:sess:',
+    cookie: {
+      path: '/',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000
+    },
+    store: redisStore({
+      all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
+    })
+  })
+)
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())

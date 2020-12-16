@@ -4,14 +4,22 @@
  * @website https://xiaokang.me
  */
 
-const REDIS_CONF = {
+let REDIS_CONF = {
   prot: 6379,
   host: '127.0.0.1'
 }
 
 // 判断线上环境还是线下环境
-if (process.env) {
+if (process.env === 'dev') {
+  REDIS_CONF = {
+    prot: 6379,
+    host: '127.0.0.1'
+  }
 } else {
+  REDIS_CONF = {
+    prot: 6379,
+    host: '127.0.0.1'
+  }
 }
 
 module.exports = { REDIS_CONF }
