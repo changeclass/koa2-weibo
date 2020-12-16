@@ -28,7 +28,7 @@ const Blog = seq.define('blog', {
     allowNull: false
   },
   content: {
-    type: Sequelize.STRING,
+    type: Sequelize.TEXT,
     allowNull: false
   },
   userId: {
@@ -41,7 +41,7 @@ Blog.belongsTo(User, {
   foreignKey: 'userId'
 })
 // 外键关联 第二种方式
-// User.hasMany(Blog, {
-//   foreignKey: 'userId'
-// })
+User.hasMany(Blog, {
+  foreignKey: 'userId'
+})
 module.exports = { User, Blog }
