@@ -12,7 +12,8 @@ const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
-  registerFailInfo
+  registerFailInfo,
+  loginFailInfo
 } = require('../model/ErrorInfo')
 const { doCrypto } = require('../utils/cryp')
 /**
@@ -59,7 +60,29 @@ async function register({ userName, password, gender }) {
     return new ErrorModel(registerFailInfo)
   }
 }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} ctx koa2 ctx
+ * @param {*} userName 用户名
+ * @param {*} password 密码
+ * @description: 登录
+ */
+async function login(ctx, userName, password) {
+  // 登录成功之后，将用户信息放到session中
+  const userInfo = await getUserInfo(userName, doCrypto(password))
+  if (!userInfo) {
+    return new ErrorModel(loginFailInfo)
+  }
+  // 登录成功
+  if (ctx.session.userInfo == null) {
+    ctx.session.userInfo = userInfo
+  }
+  return new SuccessModel()
+}
 module.exports = {
   isExist,
-  register
+  register,
+  login
 }
