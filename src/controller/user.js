@@ -7,9 +7,13 @@
  * @LastEditors: 小康
  */
 
-const { getUserInfo } = require('../services/user')
+const { getUserInfo, createUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { registerUserNameNotExistInfo } = require('../model/ErrorInfo')
+const {
+  registerUserNameNotExistInfo,
+  registerUserNameExistInfo,
+  registerFailInfo
+} = require('../model/ErrorInfo')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -27,6 +31,34 @@ async function isExist(userName) {
   }
 }
 
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {String} userName 用户名
+ * @param {String} password 密码
+ * @param {Number} gender 性别 1是男 2是女 3是保密
+ * @description: 注册功能
+ */
+async function register({ userName, password, gender }) {
+  const userInfo = await getUserInfo(userName)
+  if (userInfo) {
+    // 用户名已存在
+    return ErrorModel(registerUserNameExistInfo)
+  }
+  // 注册功能
+  try {
+    createUser({
+      userName,
+      password,
+      gender
+    })
+    return new SuccessModel()
+  } catch (e) {
+    console.error(e.message, e.stack)
+    return new ErrorModel(registerFailInfo)
+  }
+}
 module.exports = {
-  isExist
+  isExist,
+  register
 }
