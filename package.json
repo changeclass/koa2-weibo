@@ -10,6 +10,7 @@
     "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors"
   },
   "dependencies": {
+    "ajv": "^7.0.1",
     "debug": "^4.1.1",
     "ejs": "~2.3.3",
     "koa": "^2.7.0",
