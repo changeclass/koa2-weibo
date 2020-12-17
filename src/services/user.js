@@ -58,7 +58,23 @@ async function createUser({ userName, password, gender = 3, nickName }) {
   })
   return result.dataValues
 }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {string} userName
+ * @description: 删除用户
+ */
+async function deleteUser(userName) {
+  const result = await User.destroy({
+    where: {
+      userName
+    }
+  })
+  return result > 0
+}
 module.exports = {
   getUserInfo,
-  createUser
+  createUser,
+  deleteUser
 }

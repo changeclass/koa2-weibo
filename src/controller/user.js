@@ -7,13 +7,14 @@
  * @LastEditors: 小康
  */
 
-const { getUserInfo, createUser } = require('../services/user')
+const { getUserInfo, createUser, deleteUser } = require('../services/user')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const {
   registerUserNameNotExistInfo,
   registerUserNameExistInfo,
   registerFailInfo,
-  loginFailInfo
+  loginFailInfo,
+  deleteUserFailInfo
 } = require('../model/ErrorInfo')
 const { doCrypto } = require('../utils/cryp')
 /**
@@ -81,8 +82,24 @@ async function login(ctx, userName, password) {
   }
   return new SuccessModel()
 }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {string} userName
+ * @description: 删除用户
+ */
+async function deleteCurUser(userName) {
+  const result = await deleteUser(userName)
+  if (result) {
+    return new SuccessModel()
+  } else {
+    return new ErrorModel(deleteUserFailInfo)
+  }
+}
 module.exports = {
   isExist,
   register,
-  login
+  login,
+  deleteCurUser
 }
