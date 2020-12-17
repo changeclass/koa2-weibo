@@ -23,6 +23,7 @@ const userAPIRouter = require('./routes/api/user')
 const errorViewRouter = require('./routes/view/error')
 
 const { isProd } = require('./utils/env')
+const { SESSION_SECRET_KEY } = require('./config/secretKeys')
 // error handler
 let onErrorConfig = {}
 if (isProd) {
@@ -46,7 +47,7 @@ app.use(
   })
 )
 // session配置（加密密匙）
-app.keys = ['XiaoKang666']
+app.keys = SESSION_SECRET_KEY
 app.use(
   session({
     // cookie的name 默认是 koa.sid
