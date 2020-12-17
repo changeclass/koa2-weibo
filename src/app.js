@@ -1,3 +1,11 @@
+/**
+ * @description:
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @Date: 2020-12-15 17:43:51
+ * @LastEditTime: 2020-12-17 14:16:00
+ * @LastEditors: 小康
+ */
 const Koa = require('koa')
 const app = new Koa()
 const views = require('koa-views')
@@ -11,6 +19,7 @@ const redisStore = require('koa-redis')
 const { REDIS_CONF } = require('./config/db')
 const index = require('./routes/index')
 const userViewRouter = require('./routes/view/users')
+const userAPIRouter = require('./routes/api/user')
 const errorViewRouter = require('./routes/view/error')
 
 const { isProd } = require('./utils/env')
@@ -56,6 +65,7 @@ app.use(
 )
 // routes
 app.use(index.routes(), index.allowedMethods())
+app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 
 app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
