@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title%></title>
+
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+
+    <% if (locals.list) { %>
+    <%# 有微博列表，以及右侧面板 %>
+    <link href="/css/list.css" rel="stylesheet">
+    <link href="/css/right.css" rel="stylesheet">
+    <% } %>
+
+    <% if (locals.isNarrow) { %>
+    <%# 窄模式，登录和注册 %>
+    <style>
+        body {
+            width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+        }
+    </style>
+    <% } %>
+
+    <% if (locals.isNav) { %>
+    <%# 有导航%>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <% } %>
+
+    <!-- jquery 要首先引入-->
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <!-- 封装的 ajax -->
+    <script src="/javascripts/my-ajax.js"></script>
+
+    <% if (locals.isInputBlog) { %>
+    <%# 有发布微博的功能，需要 at.js https://github.com/ichord/At.js %>
+    <link href="/css/jquery.atwho.css" rel="stylesheet">
+    <script src="/javascripts/jquery.caret.js"></script>
+    <script src="/javascripts/jquery.atwho.js"></script>
+    <% } %>
+</head>
+<body>
+
+    <% if (locals.isNav) { %>
+    <%# 有导航%>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/">慕课微博</a>
+        <ul class="navbar-nav mr-auto" style="flex-direction: row;">
+            <li class="nav-item">
+                <a class="nav-link" href="/">
+                    <i class="fa fa-home"></i>
+                    首页
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">
+                    <i class="fa fa-user"></i>
+                    我的空间
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/square">
+                    <i class="fa fa-group"></i>
+                    广场
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/setting">
+                    <i class="fa fa-gear"></i>
+                    设置
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <% } %>

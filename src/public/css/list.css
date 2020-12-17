@@ -1,0 +1,30 @@
+.weibo-list .item-wrapper {
+    position: relative;
+    padding-left: 58px;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.weibo-list .item-wrapper .user-picture {
+    width: 48px;
+    position: absolute;
+    top: 5px;
+    left: 0;
+}
+
+.weibo-list .item-wrapper .content {
+    line-height: 1.5;
+}
+
+.weibo-list .item-wrapper .content .blog-img {
+    float: right;
+    width: 100px;
+    margin-left: 10px;
+}
+
+.weibo-list .item-wrapper .info {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #666;
+}

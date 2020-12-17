@@ -1,0 +1,64 @@
+<% blogList.forEach(blog => { %>
+    <div class="item-wrapper">
+        <img class="user-picture" src="<%= blog.user.picture%>"/>
+        <div class="content clear-fix">
+            <% if (blog.image) { %>
+            <a href="<%= blog.image%>" target="_blank">
+                <img class="blog-img" src="<%= blog.image%>"/>
+            </a>
+            <% } %>
+            <a href="/profile/<%= blog.user.userName%>">
+                <%= blog.user.nickName%>
+            </a>:
+            <span><%- blog.contentFormat%></span>
+        </div>
+        <div class="info">
+            <span><%= blog.createdAtFormat%></span>
+            &nbsp;
+            <% if (locals.canReply) { %>
+            <%# 可以回复 %>
+            <a href="#" class="blog-list-reply"
+                data-content="<%= blog.content%>"
+                data-userName="<%= blog.user.userName%>"
+                data-nickName="<%= blog.user.nickName%>"
+            >
+                <i class="fa fa-mail-reply"></i> 回复
+            </a>
+            <% } %>
+        </div>
+    </div>
+<% }) %>
+
+<script>
+$(function () {
+    // 设置焦点
+    function setCursor(el, st, end) {
+        if (el.setSelectionRange) {
+            el.focus()
+            el.setSelectionRange(st, end)
+        } else if (el.createTextRange) {
+            var range = el.createTextRange()
+            range.collapse(true)
+            range.moveEnd('character',end)
+            range.moveStart('character',st)
+            range.select()
+        }
+    }
+
+    // 回复
+    var $textContent = $('#text-content')
+    $('.blog-list-reply').click(function (e) {
+        e.preventDefault()
+        var $target = $(e.target)
+
+        // 获取内容和用户
+        var content = $target.attr('data-content')
+        var userName = $target.attr('data-userName')
+        var nickName = $target.attr('data-nickName')
+
+        // 设置内容并获取焦点
+        $textContent.val(' // @' + nickName + ' - ' + userName + ' : ' + content)
+        setCursor($textContent[0], 0, 0)
+    })
+})
+</script>

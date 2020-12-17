@@ -1,0 +1,71 @@
+<div class="user-info clear-fix">
+    <img src="<%= userInfo.picture%>" class="header-img float-left"/>
+    <h4 class="user-name"><%= userInfo.nickName%></h4>
+</div>
+
+<% if (isMe) { %>
+    <%# 是当前登录用户%>
+    <p class="bold margin-top-10">
+        <a href="/at-me">
+            @提到我的 (<%= locals.atCount%>)
+        </a>
+    </p>
+<% } else { %>
+    <%# 不是当前登录用户%>
+    <p class="margin-top-10">
+        <button id="btn-un-follow" class="btn btn-light" style="display: none;">取消关注</button>
+        <button id="btn-follow" class="btn btn-primary" style="display: none;">关注</button>
+    </p>
+<% } %>
+
+<script>
+$(function () {
+    // 当前用户 id
+    var curUserId = <%= userInfo.id%> ;
+
+    // 按钮，显示和隐藏
+    var $btnFollow = $('#btn-follow')
+    var $btnUnFollow = $('#btn-un-follow')
+    if (<%= !isMe%>) {
+        // 不是当前用户，则显示“关注”或者“取消关注”
+        if (<%= locals.amIFollowed%>) {
+            $btnUnFollow.show()
+        } else {
+            $btnFollow.show()
+        }
+    }
+
+    // 关注此人
+    $btnFollow.click(function () {
+        ajax.post('/api/profile/follow', {
+            userId: curUserId
+        }, function (err) {
+            if (err) {
+                alert(err)
+                return
+            }
+            // 关注成功
+            $btnFollow.hide()
+            $btnUnFollow.show()
+        })
+    })
+
+    // 取消关注
+    $btnUnFollow.click(function () {
+        if (confirm('确定取消关注？') === false) {
+            return
+        }
+        ajax.post('/api/profile/unFollow', {
+            userId: curUserId
+        }, function (err) {
+            if (err) {
+                alert(err)
+                return
+            }
+            // 取消成功
+            $btnFollow.show()
+            $btnUnFollow.hide()
+        })
+    })
+})
+</script>

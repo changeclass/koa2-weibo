@@ -1,3 +1,13 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<%- include('layout/header', { title: '微博 - 错误页', isNav: true })%>
+
+<div class="container margin-top-20">
+    <div class="row">
+        <!-- 左侧 -->
+        <div class="col-8">
+            <h4 class="margin-bottom-20 padding-bottom-10 border-bottom">出错了</h4>
+            <p>非常抱歉，服务器出了一点点问题，请<a href="/">返回首页</a></p>
+        </div>
+    </div>
+</div>
+
+<%- include('layout/footer')%>

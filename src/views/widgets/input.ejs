@@ -1,0 +1,85 @@
+<!-- 微博输入框 -->
+<div class="margin-bottom-10 padding-bottom-10 border-bottom">
+    <textarea class="form-control" id="text-content" rows="3"></textarea>
+    <div class="margin-top-10">
+        <button class="btn btn-primary" id="btn-submit">发表</button>
+        &nbsp;
+        <a href="#" id="btn-add-img">
+            <i class="fa fa-picture-o"></i>
+            插入一张图片
+        </a>
+        <input type="file" accept="image/*" id="file-picture" style="display: none;">
+        <input type="hidden" id="input-img-url">
+        &nbsp;
+        <span id="span-img-name"></span>
+    </div>
+</div>
+
+<script>
+$(function () {
+    var $spanImgName = $('#span-img-name')
+    var $inputImgUrl = $('#input-img-url')
+    var $textContent = $('#text-content')
+    var $filePicture = $('#file-picture')
+
+    // 上传图片
+    $filePicture.change(function (e) {
+        var file = $filePicture[0].files[0]
+        $spanImgName.text(file.name)
+        ajax.upload('/api/utils/upload', file, function(err, data) {
+            if (err) {
+                alert(err)
+                return
+            }
+            // 成功
+            $inputImgUrl.val(data.url)
+        })
+    })
+
+    // 插入图片
+    $('#btn-add-img').click(function (e) {
+        e.preventDefault()
+        //  开始选择图片
+        $filePicture.click()
+    })
+
+    // 发布微博
+    $('#btn-submit').click(function () {
+        var content = $textContent.val().trim()
+        var imgUrl = $inputImgUrl.val() || ''
+
+        // 验证
+        if (content.length === 0) {
+            alert('请输入微博内容')
+            return
+        }
+
+        // 发布
+        ajax.post('/api/blog/create', {
+            content: content,
+            image: imgUrl
+        }, function (err) {
+            if (err) {
+                // 失败
+                alert(err)
+                return
+            }
+            // 成功
+            $filePicture.val('')
+            $spanImgName.text('')
+            $textContent.val('')
+            $inputImgUrl.val('')
+
+            // 刷新页面
+            location.href = location.pathname
+        })
+    })
+
+    // @ 功能
+    $textContent.atwho({
+        at: '@',
+        data: '/api/user/getAtList'
+        // data: ['Peter', 'Tom', 'Anne']
+    })
+})
+</script>
