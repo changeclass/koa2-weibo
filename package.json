@@ -23,7 +23,9 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "koa-views": "^6.2.0",
-    "redis": "^3.0.2"
+    "mysql2": "^2.2.5",
+    "redis": "^3.0.2",
+    "sequelize": "^6.3.5"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

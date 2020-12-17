@@ -3,7 +3,7 @@
  * @description sequelize存储配置
  */
 const Sequelize = require('sequelize')
-const { MYSQL_CONF } = require('../conf/db')
+const { MYSQL_CONF } = require('../config/db')
 const { isProd, isTest } = require('../utils/env')
 const { host, user, password, database } = MYSQL_CONF
 const conf = {
