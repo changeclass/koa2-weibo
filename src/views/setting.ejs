@@ -1,0 +1,156 @@
+<%- include('layout/header', { title: '微博 - 设置', isNav: true })%>
+
+<div class="container margin-top-20">
+    <div class="row">
+        <!-- 左侧 -->
+        <div class="col-8">
+            <h5 class="margin-bottom-10">基本信息</h5>
+            <form>
+                <div class="form-group row">
+                    <label for="input-nick" class="col-sm-2 col-form-label">昵称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="input-nick" placeholder="请输入昵称" value="<%= nickName%>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="input-city" class="col-sm-2 col-form-label">城市</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="input-city" placeholder="请输入城市" value="<%= city%>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="file-picture" class="col-sm-2 col-form-label">头像</label>
+                    <div class="col-sm-10">
+                        <img src="<%= picture%>" style="width: 100px;" class="margin-bottom-10" id="img-picture"/>
+                        <input type="file" class="form-control-file" accept="image/*" id="file-picture">
+                    </div>
+                </div>
+                <center><button type="submit" class="btn btn-primary" id="btn-submit-info">保存</button></center>
+            </form>
+
+            <hr/>
+            <h5 class="margin-bottom-10">修改密码</h5>
+            <form>
+                <div class="form-group row">
+                    <label for="input-cur-password" class="col-sm-2 col-form-label">当前密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="input-cur-password" placeholder="请输入当前密码">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="input-new-password" class="col-sm-2 col-form-label">新密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="input-new-password" placeholder="请输入新密码">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="input-new-password-repeat" class="col-sm-2 col-form-label">确认密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="input-new-password-repeat" placeholder="请输入确认密码">
+                    </div>
+                </div>
+                <center><button type="submit" class="btn btn-primary" id="btn-submit-password">提交</button></center>
+            </form>
+
+            <hr/>
+            <center><button class="btn btn-danger"  id="btn-logout">退出登录</button></center>
+
+        </div> <!-- 左侧结束 -->
+
+        <!-- 右侧 -->
+        <div class="col-4">
+        </div> <!-- 右侧结束 -->
+    </div>
+</div>
+
+<script>
+$(function() {
+    // 上传图片
+    var $imgPicture = $('#img-picture')
+    var $filePicture = $('#file-picture')
+    $filePicture.change(function (e) {
+        var file = $filePicture[0].files[0]
+        ajax.upload('/api/utils/upload', file, function(err, data) {
+            if (err) {
+                alert(err)
+                return
+            }
+            // 成功
+            $imgPicture.attr('src', data.url)
+        })
+    })
+
+    // 修改基本信息
+    var $inputNick = $('#input-nick')
+    var $inputCity = $('#input-city')
+    $('#btn-submit-info').click(function(e) {
+        e.preventDefault()
+        var nickName = $inputNick.val()
+        var city = $inputCity.val()
+        var picture = $imgPicture.attr('src')
+
+        ajax.patch('/api/user/changeInfo', {
+            nickName,
+            city,
+            picture
+        }, function(err, data) {
+            if (err) {
+                alert(err)
+                return
+            }
+            alert('修改成功')
+        })
+    })
+
+    // 修改密码
+    var $inputCurPassword = $('#input-cur-password')
+    var $inputNewPassword = $('#input-new-password')
+    var $inputNewPasswordRepeat = $('#input-new-password-repeat')
+    $('#btn-submit-password').click(function(e) {
+        e.preventDefault()
+        var curPassword = $inputCurPassword.val()
+        var newPassword = $inputNewPassword.val()
+        var newPasswordRepeat = $inputNewPasswordRepeat.val()
+
+        if (newPassword !== newPasswordRepeat) {
+            alert('两次新密码输入不一致')
+            return
+        }
+        if (curPassword === newPassword) {
+            alert('新密码和当前密码一致')
+            return
+        }
+        
+        ajax.patch('/api/user/changePassword', {
+            password: curPassword,
+            newPassword: newPassword
+        }, function(err, data) {
+            if (err) {
+                alert(err)
+                return
+            }
+            alert('修改成功')
+            $inputCurPassword.val('')
+            $inputNewPassword.val('')
+            $inputNewPasswordRepeat.val('')
+        })
+    })
+
+    // 退出登录
+    $('#btn-logout').click(function() {
+        if (confirm('是否确定退出登录？') === false) {
+            return
+        }
+        ajax.post('/api/user/logout', function(err, data) {
+            if (err) {
+                console.error(err)
+                return
+            }
+            alert('已成功退出')
+            location.href = '/login'
+        })
+    })
+})
+</script>
+
+<%- include('layout/footer')%>

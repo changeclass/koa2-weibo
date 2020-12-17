@@ -1,13 +1,16 @@
-<%- include('layout/header', { title: '微博 - 首页', isNav: true, list: true, isInputBlog: true })%>
+<%- include('layout/header', { title: '微博 - @ 提到我的', isNav: true, list: true, isInputBlog: true  })%>
 
 <div class="container margin-top-20">
     <div class="row">
         <!-- 左侧 -->
         <div class="col-8">
+            <h4 class="padding-bottom-10">
+                @ 提到我的 (<%= atCount%> 未读)
+            </h4>
+
             <!-- 输入框 -->
             <%- include('widgets/input')%>
 
-            <!-- 微博列表 -->
             <% if (blogData.isEmpty) { %>
                 <div>
                     <center>暂无数据</center>
@@ -27,37 +30,12 @@
                         pageIndex: blogData.pageIndex,
                         count: blogData.count,
                         containerSelector: '#container-weibo-list',
-                        api: '/api/blog/loadMore',
+                        api: '/api/atMe/loadMore',
                     })%>
                 <% } %> <!-- 加载更多 结束 -->
             <% } %>
 
         </div> <!-- 左侧结束 -->
-
-        <!-- 右侧 -->
-        <div class="col-4">
-            <!-- 个人信息 -->
-            <div class="right-item">
-                <%- include('widgets/user-info', {
-                    userInfo: userData.userInfo,
-                    isMe: true,
-                    amIFollowed: false,
-                    atCount: userData.atCount
-                });%>
-            </div>
-
-            <!-- 粉丝 -->
-            <%- include('widgets/fans', {
-                count: userData.fansData.count,
-                userList: userData.fansData.list
-            })%>
-
-            <!-- 关注 -->
-            <%- include('widgets/followers', {
-                count: userData.followersData.count,
-                userList: userData.followersData.list
-            })%>
-        </div> <!-- 右侧结束 -->
     </div>
 </div>
 

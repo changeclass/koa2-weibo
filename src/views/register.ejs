@@ -1,0 +1,125 @@
+<%- include('layout/header', { title: '微博 - 注册', isNarrow: true })%>
+
+<h1>注册</h1>
+<% if (locals.isLogin) { %>
+    <p><%= locals.userName%> 您已成功登录，请直接访问<a href="/">首页</a></p>
+<% } else { %>
+    <form>
+        <div class="form-group">
+            <input type="text" class="form-control" id="input-username" placeholder="请输入用户名">
+            <small id="span-username-info" class="form-text text-muted"></small>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="input-password" placeholder="请输入密码">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="input-password-repeat" placeholder="重新输入密码">
+            <small id="span-password-repeat-info" class="form-text text-muted"></small>
+        </div>
+        <div class="form-group">
+            <select class="form-control" id="select-gender">
+                <option value="1">男</option>
+                <option value="2">女</option>
+                <option value="3">保密</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-submit">注册</button>
+        &nbsp;
+        <a href="/login">已有账号，返回登录>></a>
+    </form>
+
+    <script>
+        $(function() {
+            var $inputUserName = $('#input-username')
+            var $spanUserNameInfo = $('#span-username-info')
+            var $inputPassword = $('#input-password')
+            var $inputPasswordRepeat = $('#input-password-repeat')
+            var $spanPasswordRepeatInfo = $('#span-password-repeat-info')
+            var $selectGender = $('#select-gender')
+            var userNameTimeoutId
+            var passwordTimeoutId
+            var isPasswordSame = false // 默认两次密码不一致
+            var isUserNameExist = true // 默认用户名已存在
+
+            // 监听用户名输入
+            $inputUserName.on('input', function() {
+                // 做一个简单的防抖
+                if (userNameTimeoutId) {
+                    clearTimeout(userNameTimeoutId)
+                }
+                userNameTimeoutId = setTimeout(function() {
+                    // 判断用户名是否已存在
+                    var userName = $inputUserName.val()
+                    ajax.post('/api/user/isExist', {
+                        userName
+                    }, function(err, data) {
+                        $spanUserNameInfo.show()
+                        if (err) {
+                            $spanUserNameInfo.text('用户名可用')
+                            isUserNameExist = false
+                        } else {
+                            $spanUserNameInfo.text('用户名已存在！')
+                            isUserNameExist = true
+                        }
+                    })
+                }, 500)
+            })
+
+            // 监听验证密码输入
+            $inputPasswordRepeat.on('input', function () {
+                // 做一个简单的防抖
+                if (passwordTimeoutId) {
+                    clearTimeout(passwordTimeoutId)
+                }
+                passwordTimeoutId = setTimeout(function() {
+                    var password = $inputPassword.val()
+                    var passwordRepeat = $inputPasswordRepeat.val()
+                    $spanPasswordRepeatInfo.show()
+                    if (password === passwordRepeat) {
+                        $spanPasswordRepeatInfo.text('两次密码一致')
+                        isPasswordSame = true
+                    } else {
+                        $spanPasswordRepeatInfo.text('两次密码不一致！')
+                        isPasswordSame = false
+                    }
+                }, 500)
+            })
+
+            // 注册事件
+            $('#btn-submit').click(function(e) {
+                // 阻止默认的提交表单行为
+                e.preventDefault()
+
+                // 验证
+                if (isUserNameExist) {
+                    alert('用户名已存在')
+                    return
+                }
+                if (!isPasswordSame) {
+                    alert('两次密码不一致')
+                    return
+                }
+
+                var userName = $inputUserName.val()
+                var password = $inputPassword.val()
+                var gender = parseInt($selectGender.val())
+
+                // 提交数据
+                ajax.post('/api/user/register', {
+                    userName,
+                    password,
+                    gender
+                }, function(err, data) {
+                    if (err) {
+                        alert(err)
+                        return
+                    }
+                    alert('注册成功，请登录')
+                    location.href = '/login'
+                })
+            })
+        })
+    </script>
+<% } %>
+
+<%- include('layout/footer')%>

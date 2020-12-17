@@ -1,23 +1,20 @@
-<%- include('layout/header', { title: '微博 - 首页', isNav: true, list: true, isInputBlog: true })%>
+<%- include('layout/header', { title: '微博 - 个人主页', isNav: true, list: true })%>
 
 <div class="container margin-top-20">
     <div class="row">
         <!-- 左侧 -->
         <div class="col-8">
-            <!-- 输入框 -->
-            <%- include('widgets/input')%>
+            <h4 class="margin-bottom-20 padding-bottom-10 border-bottom">个人空间</h4>
 
-            <!-- 微博列表 -->
             <% if (blogData.isEmpty) { %>
                 <div>
                     <center>暂无数据</center>
                 </div>
             <% } else { %>
-                <!-- 微博列表 -->
+                <!-- 微博列表 第一页 -->
                 <div id="container-weibo-list" class="weibo-list">
                     <%- include('widgets/blog-list', {
-                        blogList: blogData.blogList,
-                        canReply: true
+                        blogList: blogData.blogList
                     })%>
                 </div> <!-- 微博列表 结束 -->
                 <!-- 加载更多 -->
@@ -27,11 +24,10 @@
                         pageIndex: blogData.pageIndex,
                         count: blogData.count,
                         containerSelector: '#container-weibo-list',
-                        api: '/api/blog/loadMore',
+                        api: '/api/profile/loadMore/' + userData.userInfo.userName,
                     })%>
                 <% } %> <!-- 加载更多 结束 -->
             <% } %>
-
         </div> <!-- 左侧结束 -->
 
         <!-- 右侧 -->
@@ -40,8 +36,8 @@
             <div class="right-item">
                 <%- include('widgets/user-info', {
                     userInfo: userData.userInfo,
-                    isMe: true,
-                    amIFollowed: false,
+                    isMe: userData.isMe,
+                    amIFollowed: userData.amIFollowed,
                     atCount: userData.atCount
                 });%>
             </div>
@@ -57,6 +53,7 @@
                 count: userData.followersData.count,
                 userList: userData.followersData.list
             })%>
+
         </div> <!-- 右侧结束 -->
     </div>
 </div>
