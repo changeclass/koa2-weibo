@@ -13,8 +13,13 @@ const index = require('./routes/index')
 const users = require('./routes/users')
 const errorViewRouter = require('./routes/view/error')
 
+const { isProd } = require('./utils/env')
 // error handler
-onerror(app)
+let onErrorConfig = {}
+if (isProd) {
+  onErrorConfig.redirect = '/error'
+}
+onerror(app, onErrorConfig)
 
 // middlewares
 app.use(
