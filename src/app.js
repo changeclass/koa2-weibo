@@ -18,7 +18,7 @@ const session = require('koa-generic-session')
 const redisStore = require('koa-redis')
 const path = require('path')
 const { REDIS_CONF } = require('./config/db')
-const index = require('./routes/index')
+const blogViewRouter = require('./routes/view/blog')
 const userViewRouter = require('./routes/view/users')
 const userAPIRouter = require('./routes/api/user')
 const utilsAPIRouter = require('./routes/api/utils')
@@ -70,8 +70,9 @@ app.use(
   })
 )
 // routes
-app.use(index.routes(), index.allowedMethods())
+
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
 app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
 
