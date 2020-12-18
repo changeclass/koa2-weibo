@@ -75,6 +75,6 @@ router.patch(
 
 // 退出登录
 router.post('/logout', loginCheck, async (ctx, next) => {
-  logout(ctx)
+  ctx.body = await logout(ctx)
 })
 module.exports = router
