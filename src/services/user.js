@@ -75,12 +75,12 @@ async function deleteUser(userName) {
 }
 
 /**
- * 描述
+ * 更新用户个人信息
  * @author 小康
  * @date 2020-12-18
  * @param {Object} { newPassword,newNickName,newPicture,newcity }
  * @param {Object} { userName,password }
- * @returns {any}
+ * @returns {Boolean} 是否修改成功
  */
 async function updateUser(
   { newPassword, newNickName, newPicture, newCity },

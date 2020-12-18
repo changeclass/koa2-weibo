@@ -48,6 +48,7 @@ router.post('/delete', loginCheck, async (ctx, next) => {
   }
 })
 
+// 修改基本信息
 router.patch(
   '/changeInfo',
   loginCheck,
