@@ -3,7 +3,7 @@
  * @description user 路由
  */
 const router = require('koa-router')()
-
+const { loginRedirect } = require('../../middlewares/loginChecks')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -30,6 +30,14 @@ router.get('/login', async function (ctx, next) {
 
 router.get('/register', async function (ctx, next) {
   await ctx.render('register', getLoginInfo(ctx))
+})
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @description: 设置页面路由
+ */
+router.get('/setting', loginRedirect, async function (ctx, next) {
+  await ctx.render('setting', ctx.session.userInfo)
 })
 
 module.exports = router
