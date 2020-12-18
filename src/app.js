@@ -20,9 +20,10 @@ const path = require('path')
 const { REDIS_CONF } = require('./config/db')
 const blogViewRouter = require('./routes/view/blog')
 const userViewRouter = require('./routes/view/users')
+const errorViewRouter = require('./routes/view/error')
 const userAPIRouter = require('./routes/api/user')
 const utilsAPIRouter = require('./routes/api/utils')
-const errorViewRouter = require('./routes/view/error')
+const blogHomeAPIRouter = require('./routes/api/blog-home')
 
 const { isProd } = require('./utils/env')
 const { SESSION_SECRET_KEY } = require('./config/secretKeys')
@@ -70,13 +71,13 @@ app.use(
   })
 )
 // routes
+app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
+app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
+app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
 
 app.use(userAPIRouter.routes(), userAPIRouter.allowedMethods())
-app.use(blogViewRouter.routes(), blogViewRouter.allowedMethods())
 app.use(utilsAPIRouter.routes(), utilsAPIRouter.allowedMethods())
-app.use(userViewRouter.routes(), userViewRouter.allowedMethods())
-
-app.use(errorViewRouter.routes(), errorViewRouter.allowedMethods())
+app.use(blogHomeAPIRouter.routes(), blogHomeAPIRouter.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
