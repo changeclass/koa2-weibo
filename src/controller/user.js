@@ -164,11 +164,23 @@ async function changePassword(userName, password, newPassword) {
     return new ErrorModel(changePasswordFailInfo)
   }
 }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {Object} ctx
+ * @description: 退出登录
+ */
+async function logout(ctx) {
+  delete ctx.session.userInfo
+  return new SuccessModel()
+}
 module.exports = {
   isExist,
   register,
   login,
   deleteCurUser,
   changeInfo,
-  changePassword
+  changePassword,
+  logout
 }
