@@ -6,7 +6,7 @@
  * @LastEditTime: 2020-12-18 16:46:39
  * @LastEditors: 小康
  */
-
+const xss = require('xss')
 const { createBlogFailInfo } = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { createBlog } = require('../services/blog')
@@ -22,7 +22,7 @@ const { createBlog } = require('../services/blog')
 async function create({ userId, content, image }) {
   // servers
   try {
-    const blog = await createBlog({ userId, content, image })
+    const blog = await createBlog({ userId, content: xss(content), image })
     return new SuccessModel(blog)
   } catch (error) {
     console.error(error.message, error.stack)

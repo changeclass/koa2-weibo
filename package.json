@@ -28,7 +28,8 @@
     "koa-views": "^6.2.0",
     "mysql2": "^2.2.5",
     "redis": "^3.0.2",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
