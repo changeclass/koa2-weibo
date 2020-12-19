@@ -7,7 +7,7 @@
  * @LastEditors: 小康
  */
 const { Blog, User } = require('../db/model/index')
-const { formatUser } = require('./_format')
+const { formatUser, formatBlog } = require('./_format')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -53,6 +53,9 @@ async function getBlogListByUser({ userName, pageIndex = 0, pageSize = 10 }) {
   })
   // 获取dataValues
   let blogList = result.rows.map((row) => row.dataValues)
+
+  // 格式化
+  blogList = formatBlog(blogList)
   blogList = blogList.map((blogItem) => {
     const user = blogItem.user.dataValues
     blogItem.user = formatUser(user)
