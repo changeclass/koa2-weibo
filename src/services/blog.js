@@ -6,8 +6,8 @@
  * @LastEditTime: 2020-12-18 16:48:09
  * @LastEditors: 小康
  */
-const { Blog } = require('../db/model/index')
-
+const { Blog, User } = require('../db/model/index')
+const { formatUser } = require('./_format')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -24,7 +24,47 @@ async function createBlog({ userId, content, image }) {
   })
   return result.dataValues
 }
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} userName 用户名
+ * @param {*} pageIndex 页面索引
+ * @param {*} pageSize 页面大小
+ * @description: 根据用户名查询微博
+ */
+async function getBlogListByUser({ userName, pageIndex = 0, pageSize = 10 }) {
+  // 拼接查询条件
+  const userWhereOpts = {}
+  if (userName) {
+    userWhereOpts.userName = userName
+  }
+  // 执行查询
+  const result = await Blog.findAndCountAll({
+    limit: pageSize, // 每页多少条
+    offset: pageSize * pageIndex, // 跳过多少条
+    order: [['id', 'desc']],
+    include: [
+      {
+        model: User,
+        attributes: ['userName', 'nickName', 'picture'],
+        where: userWhereOpts
+      }
+    ]
+  })
+  // 获取dataValues
+  let blogList = result.rows.map((row) => row.dataValues)
+  blogList = blogList.map((blogItem) => {
+    const user = blogItem.user.dataValues
+    blogItem.user = formatUser(user)
+    return blogItem
+  })
+  return {
+    count: result.count,
+    blogList
+  }
+}
 
 module.exports = {
-  createBlog
+  createBlog,
+  getBlogListByUser
 }

@@ -9,5 +9,6 @@
 
 module.exports = {
   DEFAULT_PICTURE:
-    'https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/avatar.jpg'
+    'https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/avatar.jpg',
+  PAGE_SIZE: 5
 }
