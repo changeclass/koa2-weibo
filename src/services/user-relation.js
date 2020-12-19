@@ -41,7 +41,22 @@ async function addFollow(userId, followerId) {
   })
   return result.dataValues
 }
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {number} userId 用户ID
+ * @param {number} followerId 被关注用户id
+ * @description: 取消关注关系
+ */
+async function deleteFollow(userId, followerId) {
+  const result = await UserRelation.destroy({
+    where: { userId, followerId }
+  })
+  return result > 0
+}
+
 module.exports = {
   getUsersByFollower,
-  addFollow
+  addFollow,
+  deleteFollow
 }

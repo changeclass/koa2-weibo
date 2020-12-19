@@ -7,9 +7,16 @@
  * @LastEditors: 小康
  */
 
-const { addFollowerFailInfo } = require('../model/ErrorInfo')
+const {
+  addFollowerFailInfo,
+  deleteUserFailInfo
+} = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { getUsersByFollower, addFollow } = require('../services/user-relation')
+const {
+  getUsersByFollower,
+  addFollow,
+  deleteFollow
+} = require('../services/user-relation')
 
 /**
  * @author: 小康
@@ -39,7 +46,24 @@ async function follow(myUserId, curUserId) {
   }
 }
 
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} myUserId 我的ID
+ * @param {*} curUserId 当前登录的用户ID
+ * @description: 取消关注
+ */
+async function unFollow(myUserId, curUserId) {
+  const result = await deleteFollow(myUserId, curUserId)
+  if (result) {
+    return new SuccessModel()
+  } else {
+    return new ErrorModel(deleteUserFailInfo)
+  }
+}
+
 module.exports = {
   getFans,
-  follow
+  follow,
+  unFollow
 }
