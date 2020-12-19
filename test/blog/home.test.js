@@ -7,7 +7,7 @@
  * @LastEditors: 小康
  */
 const server = require('../server')
-const { COOKIE } = require('../testUserInfo')
+const { L_COOKIE } = require('../testUserInfo')
 test('创建一条微博,应该成功', async () => {
   // 定义测试内容
   const content = '单元测试自动创建的微博_' + Date.now()
@@ -16,7 +16,7 @@ test('创建一条微博,应该成功', async () => {
   const res = await server
     .post('/api/blog/create')
     .send({ content, image })
-    .set('cookie', COOKIE)
+    .set('cookie', L_COOKIE)
 
   expect(res.body.errno).toBe(0)
   expect(res.body.data.content).toBe(content)
