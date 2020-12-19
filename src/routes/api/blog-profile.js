@@ -10,6 +10,7 @@
 const router = require('koa-router')()
 
 const { getProfileBlogList } = require('../../controller/blog-profile')
+const { follow } = require('../../controller/user-relation')
 const { loginCheck } = require('../../middlewares/loginChecks')
 const { getBlogListStr } = require('../../utils/blog')
 
@@ -24,4 +25,11 @@ router.get('/loadMore/:userName/:pageIndex', loginCheck, async (ctx, next) => {
   ctx.body = result
 })
 
+// 关注用户
+router.post('/follow', loginCheck, async (ctx, next) => {
+  const { id: myUserId } = ctx.session.userInfo
+  const { userId: curUserId } = ctx.request.body
+  // controller
+  ctx.body = await follow(myUserId, curUserId)
+})
 module.exports = router

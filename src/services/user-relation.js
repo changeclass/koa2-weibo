@@ -27,6 +27,21 @@ async function getUsersByFollower(followerId) {
   return { count: result.count, userList }
 }
 
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {number} userId 用户ID
+ * @param {number} followerId 被关注用户id
+ * @description: 添加关注关系
+ */
+async function addFollow(userId, followerId) {
+  const result = await UserRelation.create({
+    userId,
+    followerId
+  })
+  return result.dataValues
+}
 module.exports = {
-  getUsersByFollower
+  getUsersByFollower,
+  addFollow
 }

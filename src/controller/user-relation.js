@@ -7,8 +7,9 @@
  * @LastEditors: 小康
  */
 
-const { SuccessModel } = require('../model/ResModel')
-const { getUsersByFollower } = require('../services/user-relation')
+const { addFollowerFailInfo } = require('../model/ErrorInfo')
+const { SuccessModel, ErrorModel } = require('../model/ResModel')
+const { getUsersByFollower, addFollow } = require('../services/user-relation')
 
 /**
  * @author: 小康
@@ -22,6 +23,23 @@ async function getFans(userId) {
   return new SuccessModel({ count, userList })
 }
 
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} myUserId 我的ID
+ * @param {*} curUserId 当前登录的用户ID
+ * @description: 关注
+ */
+async function follow(myUserId, curUserId) {
+  try {
+    await addFollow(myUserId, curUserId)
+    return new SuccessModel()
+  } catch (err) {
+    return new ErrorModel(addFollowerFailInfo)
+  }
+}
+
 module.exports = {
-  getFans
+  getFans,
+  follow
 }

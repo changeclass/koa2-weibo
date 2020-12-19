@@ -80,7 +80,7 @@ router.get('/profile/:userName', loginRedirect, async (ctx, next) => {
       count
     },
     userData: {
-      userInfo: ctx.session.userInfo,
+      userInfo: curUserInfo,
       isMe,
       fansData: {
         count: fansCount,
