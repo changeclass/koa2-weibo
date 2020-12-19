@@ -6,6 +6,7 @@
  * @LastEditTime: 2020-12-18 16:48:09
  * @LastEditors: 小康
  */
+const { PAGE_SIZE } = require('../config/constant')
 const { Blog, User } = require('../db/model/index')
 const { formatUser, formatBlog } = require('./_format')
 /**
@@ -32,7 +33,11 @@ async function createBlog({ userId, content, image }) {
  * @param {*} pageSize 页面大小
  * @description: 根据用户名查询微博
  */
-async function getBlogListByUser({ userName, pageIndex = 0, pageSize = 10 }) {
+async function getBlogListByUser({
+  userName,
+  pageIndex = 0,
+  pageSize = PAGE_SIZE
+}) {
   // 拼接查询条件
   const userWhereOpts = {}
   if (userName) {

@@ -10,7 +10,7 @@
 module.exports = {
   DEFAULT_PICTURE:
     'https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/avatar.jpg',
-  PAGE_SIZE: 5,
+  PAGE_SIZE: 1,
   // 正则表达式，匹配 '@昵称 - userName'
   REG_FOR_AT_WHO: /@(.+?)\s-\s(\w+?)\b/g
 }
