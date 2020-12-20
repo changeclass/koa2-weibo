@@ -24,4 +24,19 @@ async function createAtReplation(blogId, userId) {
   return result.dataValues
 }
 
-module.exports = { createAtReplation }
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} userId
+ * @description: 获取at用户的微博数量（未读）
+ */
+async function getAtRelationCount(userId) {
+  const result = await AtRelation.findAndCountAll({
+    where: {
+      userId,
+      isRead: false
+    }
+  })
+  return result.count
+}
+module.exports = { createAtReplation, getAtRelationCount }
