@@ -9,7 +9,8 @@
 
 const {
   getAtRelationCount,
-  getUserBlogList
+  getUserBlogList,
+  updataAtRelation
 } = require('../services/at-relation')
 const { SuccessModel } = require('../model/ResModel')
 const { PAGE_SIZE } = require('../config/constant')
@@ -50,7 +51,22 @@ async function getAtMeBlogList(userId, pageIndex = 0) {
   })
 }
 
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} userId
+ * @description: 标记已读
+ */
+async function markAsRead(userId) {
+  try {
+    await updataAtRelation({ newIsRead: true }, { userId, isRead: false })
+  } catch (error) {
+    console.error(error)
+  }
+  // 不需要返回
+}
 module.exports = {
   getAtMeCount,
-  getAtMeBlogList
+  getAtMeBlogList,
+  markAsRead
 }

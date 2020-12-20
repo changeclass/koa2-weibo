@@ -79,8 +79,38 @@ async function getUserBlogList({ userId, pageIndex, pageSize = PAGE_SIZE }) {
     blogList
   }
 }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {Object} 要更新的内容
+ * @param {Object} 条件
+ * @description: 更新数据
+ */
+async function updataAtRelation({ newIsRead }, { userId, isRead }) {
+  // 拼接更新内容
+  const updataData = {}
+  if (newIsRead) {
+    updataData.isRead = newIsRead
+  }
+  // 拼接查询条件
+  const whereData = {}
+  if (userId) {
+    whereData.userId = userId
+  }
+  if (isRead) {
+    whereData.isRead = isRead
+  }
+  // 执行更新
+  const result = await AtRelation.update(updataData, {
+    where: whereData
+  })
+  return result[0] > 0
+}
+
 module.exports = {
   createAtReplation,
   getAtRelationCount,
-  getUserBlogList
+  getUserBlogList,
+  updataAtRelation
 }
