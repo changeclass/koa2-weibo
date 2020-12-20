@@ -7,8 +7,9 @@
  * @LastEditors: 小康
  */
 
-const { AtRelation } = require('../db/model')
-
+const { AtRelation, Blog, User } = require('../db/model')
+const { PAGE_SIZE } = require('../config/constant')
+const { formatBlog, formatUser } = require('./_format')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -39,4 +40,47 @@ async function getAtRelationCount(userId) {
   })
   return result.count
 }
-module.exports = { createAtReplation, getAtRelationCount }
+
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {*} userId
+ * @param {*} pageIndex
+ * @param {*} pageSize
+ * @description: 获取 @ 用户的微博列表
+ */
+async function getUserBlogList({ userId, pageIndex, pageSize = PAGE_SIZE }) {
+  const result = await Blog.findAndCountAll({
+    limit: pageSize,
+    offset: pageSize * pageIndex,
+    order: [['id', 'desc']],
+    include: [
+      // @ 关系
+      {
+        model: AtRelation,
+        attributes: ['userId', 'blogId'],
+        where: { userId }
+      },
+      // 用户
+      {
+        model: User,
+        attributes: ['userName', 'nickName', 'picture']
+      }
+    ]
+  })
+  let blogList = result.rows.map((row) => row.dataValues)
+  blogList = formatBlog(blogList)
+  blogList = blogList.map((blogItem) => {
+    blogItem.user = formatUser(blogItem.user.dataValues)
+    return blogItem
+  })
+  return {
+    count: result.count,
+    blogList
+  }
+}
+module.exports = {
+  createAtReplation,
+  getAtRelationCount,
+  getUserBlogList
+}
