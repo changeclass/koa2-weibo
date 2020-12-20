@@ -12,21 +12,34 @@ const { isExist } = require('../../controller/user')
 const { getProfileBlogList } = require('../../controller/blog-profile')
 const { getSquareBlogList } = require('../../controller/blog-square')
 const { getFans, getFollowers } = require('../../controller/user-relation')
+const { getHomeBlogList } = require('../../controller/blog-home')
 // 首页
 router.get('/', loginRedirect, async (ctx, next) => {
+  const userInfo = ctx.session.userInfo
+  const { id: userId } = userInfo
+  // 获取第一页数据
+  // controller
+  const result = await getHomeBlogList(userId)
+  const { isEmpty, blogList, pageSize, pageIndex, count } = result.data
+  // 获取粉丝
+  const fansResult = await getFans(userId)
+  const { count: fansCount, userList: fansList } = fansResult.data
+  // 获取关注人列表
+  // controller
+  const followersResult = await getFollowers(userId)
+  const { count: followersCount, followersList } = followersResult.data
+
   await ctx.render('index', {
-    blogData: {
-      blogList: []
-    },
+    blogData: { isEmpty, blogList, pageSize, pageIndex, count },
     userData: {
       userInfo: ctx.session.userInfo,
       fansData: {
-        count: 0,
-        list: []
+        count: fansCount,
+        list: fansList
       },
       followersData: {
-        count: 0,
-        list: []
+        count: followersCount,
+        list: followersList
       }
     }
   })

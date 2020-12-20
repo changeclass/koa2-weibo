@@ -55,7 +55,7 @@ async function getFollowerByUser(userId) {
     ],
     where: {
       userId,
-      userId: {
+      followerId: {
         [Sequelize.Op.ne]: userId
       }
     }

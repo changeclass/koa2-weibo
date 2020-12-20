@@ -7,7 +7,7 @@
  * @LastEditors: 小康
  */
 const { PAGE_SIZE } = require('../config/constant')
-const { Blog, User } = require('../db/model/index')
+const { Blog, User, UserRelation } = require('../db/model/index')
 const { formatUser, formatBlog } = require('./_format')
 /**
  * @author: 小康
@@ -72,7 +72,49 @@ async function getBlogListByUser({
   }
 }
 
+/**
+ * @author 小康
+ * @date 2020-12-20
+ * @param {any} userId
+ * @param {any} pageIndex 默认为0
+ * @param {any} pageSize 常量 PAGE_SIZE 的值
+ * @description 获取关注者的微博
+ */
+async function getFollowerBlogList({
+  userId,
+  pageIndex = 0,
+  pageSize = PAGE_SIZE
+}) {
+  const result = await Blog.findAndCountAll({
+    limit: pageSize,
+    offset: pageSize * pageIndex,
+    order: [['id', 'desc']],
+    include: [
+      {
+        model: User,
+        attributes: ['userName', 'nickName', 'picture']
+      },
+      {
+        model: UserRelation,
+        attributes: ['userId', 'followerId'],
+        where: { userId }
+      }
+    ]
+  })
+  // 格式化数据
+  let blogList = result.rows.map((row) => row.dataValues)
+  blogList = formatBlog(blogList)
+  blogList = blogList.map((blogItem) => {
+    blogItem.user = formatUser(blogItem.user.dataValues)
+    return blogItem
+  })
+  return {
+    count: result.count,
+    blogList
+  }
+}
 module.exports = {
   createBlog,
-  getBlogListByUser
+  getBlogListByUser,
+  getFollowerBlogList
 }

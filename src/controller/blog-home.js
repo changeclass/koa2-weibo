@@ -7,9 +7,10 @@
  * @LastEditors: 小康
  */
 const xss = require('xss')
+const { PAGE_SIZE } = require('../config/constant')
 const { createBlogFailInfo } = require('../model/ErrorInfo')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { createBlog } = require('../services/blog')
+const { createBlog, getFollowerBlogList } = require('../services/blog')
 
 /**
  * @author: 小康
@@ -30,4 +31,29 @@ async function create({ userId, content, image }) {
   }
 }
 
-module.exports = { create }
+/**
+ * @author: 小康
+ * @url: https://xiaokang.me
+ * @param {number} userId
+ * @param {number} pageIndex
+ * @description: 获取首页微博列表
+ */
+async function getHomeBlogList(userId, pageIndex = 0) {
+  const result = await getFollowerBlogList({
+    userId,
+    pageIndex,
+    pageSize: PAGE_SIZE
+  })
+  const { count, blogList } = result
+
+  // 返回数据
+  return new SuccessModel({
+    isEmpty: blogList.length === 0,
+    blogList,
+    pageSize: PAGE_SIZE,
+    pageIndex,
+    count
+  })
+}
+
+module.exports = { create, getHomeBlogList }
