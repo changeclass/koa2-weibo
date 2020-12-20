@@ -8,13 +8,13 @@
  */
 
 module.exports = {
-  L_ID: 2,
+  L_ID: 4,
   L_COOKIE:
-    'weibo.sid=NXM4dqh5SQ2v3BVN6yDlio-rHTF4v7cZ; weibo.sid.sig=LNtgUbRJ-JLwDZJXTuudd4C6USk',
+    'weibo.sid=HcRMm3bc0O-CthJQYsYS1AoT-BoGNTAP; weibo.sid.sig=oJoHWQ5kQGSVU92CsLNAKuCP_sc',
   L_USER_NAME: 'lisi',
 
-  Z_ID: 1,
+  Z_ID: 3,
   Z_USER_NAME: 'zhangsan',
   Z_COOKIE:
-    'weibo.sid=KbqwCh6pNXj1x9tH5DvFqbKA2zIBMpmO; weibo.sid.sig=edyVfWXn2ZoJMvkQ87HLhgae5fw'
+    'weibo.sid=xBzxsgBdOzzh2m761YcPAsk83iIQLhyL; weibo.sid.sig=R4yg9P3GmC2EKIFamqpTflCBeCk'
 }
