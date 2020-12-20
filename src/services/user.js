@@ -9,7 +9,7 @@
 
 const { User } = require('../db/model/index')
 const { formatUser } = require('./_format')
-
+const { addFollow } = require('./user-relation')
 /**
  * @author: 小康
  * @url: https://xiaokang.me
@@ -50,13 +50,16 @@ async function getUserInfo(userName, password) {
  * @description: 创建用户
  */
 async function createUser({ userName, password, gender = 3, nickName }) {
-  const result = User.create({
+  const result = await User.create({
     userName,
     password,
     gender,
     nickName: nickName ? nickName : userName
   })
-  return result.dataValues
+  const data = result.dataValues
+  // 自己关注自己
+  addFollow(data.id, data.id)
+  return data
 }
 
 /**

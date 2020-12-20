@@ -6,6 +6,7 @@
  * @LastEditTime: 2020-12-19 15:50:52
  * @LastEditors: 小康
  */
+const Sequelize = require('sequelize')
 const { User, UserRelation } = require('../db/model/index')
 const { formatUser } = require('./_format')
 
@@ -19,7 +20,17 @@ async function getUsersByFollower(followerId) {
   const result = await User.findAndCountAll({
     attributes: ['id', 'userName', 'nickName', 'picture'],
     order: [['id', 'desc']],
-    include: [{ model: UserRelation, where: { followerId } }]
+    include: [
+      {
+        model: UserRelation,
+        where: {
+          followerId,
+          userId: {
+            [Sequelize.Op.ne]: followerId
+          }
+        }
+      }
+    ]
   })
   // 格式化
   let userList = result.rows.map((row) => row.dataValues)
@@ -43,7 +54,10 @@ async function getFollowerByUser(userId) {
       }
     ],
     where: {
-      userId
+      userId,
+      userId: {
+        [Sequelize.Op.ne]: userId
+      }
     }
   })
   let userList = result.rows.map((row) => row.dataValues)
